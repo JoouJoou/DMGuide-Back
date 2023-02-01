@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum gType {
+  Medieval
+  Cyberpunk
+  Herois
+  Terror
+  Zumbis
+  Guerra
+}
+
+model User {
+  id                  Int       @id @default(autoincrement()) 
+  email               String    @unique @db.VarChar(255)
+  name                String    @db.VarChar(255)
+  password            String    @db.VarChar(255)
+  picture             String?
+  createdAt           DateTime  @default(now()) @db.Timestamp(6)
+  adventures          Adventure[]
+
+  @@map("users")
+}
+
+model Adventure {
+  id                  Int       @id @default(autoincrement()) 
+  user                User      @relation(fields: [userId], references: [id])
+  userId              Int
+  genre               Genre     @relation(fields: [genreId], references: [id])
+  genreId             Int
+  adventureName       String    @db.VarChar(255)
+  adventureBanner     String
+  Description         String 
+  createdAt           DateTime  @default(now()) @db.Timestamp(6)
+  characters          Character[]
+  locations           Location[]
+
+
+  @@map("adventures")
+}
+
+model Genre {
+  id                  Int       @id @default(autoincrement())
+  genreType           gType
+  createdAt           DateTime  @default(now()) @db.Timestamp(6)
+  adventures          Adventure[]
+
+  @@map("genres")
+
+}
+
+model Character {
+  id                  Int       @id @default(autoincrement())
+  adventure           Adventure @relation(fields: [adventureId], references: [id])
+  adventureId         Int
+  characterName       String    @db.VarChar(255)
+  characterPicture    String?
+  Height              Int?
+  Age                 Int?
+  Race                String?    @db.VarChar(255)
+  characterBackground String?
+  Playlist            String?
+  createdAt           DateTime  @default(now()) @db.Timestamp(6)
+
+  @@map("characters")
+}
+
+model Location {
+  id                  Int       @id @default(autoincrement())
+  adventure           Adventure @relation(fields: [adventureId], references: [id])
+  adventureId         Int
+  locationName        String    @db.VarChar(255)
+  locationPicture     String?
+  locationDescription String?
+  createdAt           DateTime  @default(now()) @db.Timestamp(6)
+
+  @@map("locations")
+}
