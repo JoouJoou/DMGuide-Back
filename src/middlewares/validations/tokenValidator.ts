@@ -28,4 +28,3 @@ export async function validateToken(
     throw unauthorizedError("Token");
   }
 }
-
