@@ -39,7 +39,7 @@ model Adventure {
   genreId             Int
   adventureName       String    @db.VarChar(255)
   adventureBanner     String
-  Description         String 
+  description         String 
   createdAt           DateTime  @default(now()) @db.Timestamp(6)
   characters          Character[]
   locations           Location[]
@@ -64,11 +64,11 @@ model Character {
   adventureId         Int
   characterName       String    @db.VarChar(255)
   characterPicture    String?
-  Height              Int?
-  Age                 Int?
-  Race                String?    @db.VarChar(255)
+  height              Int?
+  age                 Int?
+  race                String?    @db.VarChar(255)
   characterBackground String?
-  Playlist            String?
+  playlist            String?
   createdAt           DateTime  @default(now()) @db.Timestamp(6)
 
   @@map("characters")
