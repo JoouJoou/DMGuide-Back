@@ -10,7 +10,7 @@ export async function insertAdventure(
       genreId: true,
       adventureName: true,
       adventureBanner: true,
-      Description: true,
+      description: true,
     },
     data: adventure,
   });
@@ -24,4 +24,30 @@ export async function findUserByIdWithAdventures(id: number) {
     },
   });
   return user;
+}
+
+export async function findAdventureById(id: number) {
+  return await prisma.adventure.findFirst({
+    where: { id },
+    include: {
+      characters: true,
+      locations: true,
+    },
+  });
+}
+
+export async function updateAdventure(
+  id: number,
+  data: adventureTypes.IAdventureUpdateData
+) {
+  return await prisma.adventure.update({
+    where: { id },
+    data: data,
+  });
+}
+
+export async function deleteAdventureById(id: number) {
+  return await prisma.adventure.delete({
+    where: { id },
+  });
 }

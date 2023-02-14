@@ -6,3 +6,9 @@ export type IAdventureDataPARTIAL = Omit<
 >;
 
 export type IAdventureDataFULL = Omit<Adventure, "id" | "createdAt">;
+
+export type IAdventureUpdateData = {
+  adventureName?: string;
+  adventureBanner?: string;
+  Description?: string;
+};

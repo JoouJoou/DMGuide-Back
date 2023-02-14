@@ -3,7 +3,10 @@ import { validateSchema } from "../middlewares/validations/schemaValidator";
 import { validateToken } from "../middlewares/validations/tokenValidator";
 import { updateUserSchema } from "../schemas/userSchema";
 import * as adventureController from "../controllers/adventureController";
-import { adventureSchema } from "../schemas/adventureSchema";
+import {
+  adventureSchema,
+  updateAdventureSchema,
+} from "../schemas/adventureSchema";
 
 const adventureRouter = Router();
 
@@ -18,4 +21,23 @@ adventureRouter.get(
   validateToken,
   adventureController.getUserAdventures
 );
+adventureRouter.put(
+  "/adventure/:adventureId",
+  validateToken,
+  validateSchema(updateAdventureSchema),
+  adventureController.updateAdventure
+);
+
+adventureRouter.get(
+  "/adventure/:adventureId",
+  validateToken,
+  adventureController.getAdventure
+);
+
+adventureRouter.delete(
+  "/adventure/:adventureId",
+  validateToken,
+  adventureController.deleteAdventure
+ );
+
 export default adventureRouter;

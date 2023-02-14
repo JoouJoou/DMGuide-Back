@@ -1,8 +1,10 @@
 import * as generalRepository from "../repositories/generalRepository";
 import * as adventureRepository from "../repositories/adventureRepository";
 import * as adventureTypes from "../types/adventureTypes";
-import * as generalUtils from "../utils/generalUtils";
-import { notFoundError } from "../middlewares/errorMiddleware";
+import {
+  notFoundError,
+  unauthorizedError,
+} from "../middlewares/errorMiddleware";
 
 export async function createAdventure(
   adventure: adventureTypes.IAdventureDataPARTIAL,
@@ -26,4 +28,52 @@ export async function getAdventures(userId: number) {
   if (!adventures) throw notFoundError("user");
 
   return adventures;
+}
+
+export async function getAdventure(userId: number, adventureId: number) {
+  const user = await generalRepository.findUserById(userId);
+
+  if (!user) throw notFoundError("user");
+
+  const adventure = await adventureRepository.findAdventureById(adventureId);
+
+  if (!adventure) throw notFoundError("adventure");
+  if (adventure.userId !== user.id) throw unauthorizedError("User");
+
+  return adventure;
+}
+
+export async function updateAdventure(
+  adventureData: adventureTypes.IAdventureUpdateData,
+  userId: number,
+  adventureId: number
+) {
+  const user = await generalRepository.findUserById(userId);
+
+  if (!user) throw notFoundError("user");
+
+  const adventure = await adventureRepository.findAdventureById(adventureId);
+
+  if (!adventure) throw notFoundError("adventure");
+  if (adventure.userId !== user.id) throw unauthorizedError("User");
+
+  const updatedAdventure = await adventureRepository.updateAdventure(
+    adventureId,
+    adventureData
+  );
+
+  return updatedAdventure;
+}
+
+export async function deleteAdventure(userId: number, adventureId: number) {
+  const user = await generalRepository.findUserById(userId);
+
+  if (!user) throw notFoundError("user");
+
+  const adventure = await adventureRepository.findAdventureById(adventureId);
+
+  if (!adventure) throw notFoundError("adventure");
+  if (adventure.userId !== user.id) throw unauthorizedError("User");
+
+  return await adventureRepository.deleteAdventureById(adventureId);
 }
